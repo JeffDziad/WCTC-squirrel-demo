@@ -16,4 +16,22 @@
     <h2>Tracking Sightings for Fun and Science</h2>
 </header>
 
+<div th:fragment="sightingsTable" class="sightings">
+    <table>
+    <tr>
+        <th>Spotted By</th>
+        <th>At</th>
+        <th>On</th>
+        <th>Number Spotted</th>
+    </tr>
+    <tr th:each="sighting : ${sightings}">
+        <td th:text="${sighting.spotterName}"></td>
+        <td th:text="|${sighting.location.name} (${sighting.location.country})|"></td>
+        <td th:text="${sighting.spottedAt}"></td>
+        <td th:text="${sighting.count}"></td>
+    </tr>
+    </table>
+</div>
+
+
 </html>
