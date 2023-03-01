@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{frags :: head('Report a Sighting')}"></head>
+<body>
+
+<header th:replace="~{frags :: logo}"></header>
+
+<div class="form">
+    <img th:src="@{/img/__${squirrelObj.image_file_name}__}" th:alt="${squirrelObj.commonName}">
+    <br>
+    <h3 th:text="|Tell us about your ${squirrelObj.commonName} sighting!|"></h3>
+    <br>
+    <form method="post" th:action="@{/save}" th:object="${theSighting}">
+        <label for="spotter">Name of Spotter</label>
+        <br>
+        <input type="text" id="spotter" th:field="*{spotterName}">
+        <br>
+        <label for="location">Location</label>
+        <br>
+        <select id="location" th:field="*{location}">
+            <option th:each="loc : ${locations}" th:value="${loc.id}" th:text="|${loc.name} (${loc.country})|">
+                LOCATION
+            </option>
+        </select>
+        <br>
+        <label for="count">How many did you spot?</label>
+        <br>
+        <input type="number" id="count" th:field="*{count}">
+        <br>
+        <input type="submit" value="Report Sighting">
+    </form>
+</div>
+
+</body>
+</html>

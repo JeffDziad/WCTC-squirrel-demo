@@ -3,6 +3,7 @@ package com.jeffdziad.squirreldemo;
 import com.jeffdziad.squirreldemo.IService.LocationService;
 import com.jeffdziad.squirreldemo.IService.SightingService;
 import com.jeffdziad.squirreldemo.IService.SquirrelService;
+import com.jeffdziad.squirreldemo.entity.Sighting;
 import com.jeffdziad.squirreldemo.entity.Squirrel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,21 @@ public class SightingController {
     private LocationService locationService;
 
     @GetMapping("/report")
-    public String showSightingForm() {
+    public String showSightingForm(@RequestParam("id") String id, Model model) {
+
+        int squirrelId = 0;
+        try {
+            squirrelId = Integer.parseInt(id);
+        } catch(NumberFormatException e) {
+            squirrelId = 1;
+        }
+
+        model.addAttribute("squirrelObj", squirrelService.getSquirrel(squirrelId));
+        model.addAttribute("locations", locationService.getLocationList());
+
+        Sighting newSighting = new Sighting();
+        model.addAttribute("theSighting", newSighting);
+
         return "sighting-form";
     }
 
@@ -39,14 +54,18 @@ public class SightingController {
 
     @GetMapping("/sightings")
     // @RequestParam doesn't need any parameters, only if the variable differs from the url query string.
-    public String showSightingsList(@RequestParam("id") int id, Model model) {
+    public String showSightingsList(@RequestParam("id") String id, Model model) {
 
-//        int squirrelId = 0;
-//        int squirrelId = Integer.parseInt()
+        int squirrelId = 0;
+        try {
+            squirrelId = Integer.parseInt(id);
+        } catch(NumberFormatException e) {
+            squirrelId = 1;
+        }
 
-        Squirrel squirrel = squirrelService.getSquirrel(id);
+        Squirrel squirrel = squirrelService.getSquirrel(squirrelId);
         model.addAttribute("commonName", squirrel.getCommonName());
-        model.addAttribute("sightings", sightingService.getSightingsForSquirrel(id));
+        model.addAttribute("sightings", sightingService.getSightingsForSquirrel(squirrelId));
         return "sighting-list";
     }
 
